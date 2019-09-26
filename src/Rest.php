@@ -69,8 +69,10 @@ final class Rest
             $status      = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
             $headers     = $this->parseHeaders(substr($data, 0, $header_size));
+            $headers_lower_case = array_change_key_case($headers, CASE_LOWER);
+
             if ($status === 400 &&
-                                (int) $headers['X-RateLimit-Remaining'] === 0) {
+                                (int) $headers_lower_case['x-ratelimit-remaining'] === 0) {
                 $i ++;
                 sleep(10);
             } else {
